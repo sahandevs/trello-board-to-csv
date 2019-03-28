@@ -19,8 +19,7 @@ def main():
     database = DataBase()
     runner = Runner(data_provider, database)
     runner.run()
-    database.export("c:\export1")
-    # TODO: database to file
+    database.export(OUT)
 
 
 if __name__ == "__main__":
