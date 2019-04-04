@@ -1,6 +1,7 @@
 from typing import Dict
 import trello
 from ..base import DataExtractor
+from datetime import datetime, timezone
 
 
 class BaseData(DataExtractor):
@@ -30,6 +31,8 @@ class BaseData(DataExtractor):
         data["last activity"] = str(self.card.dateLastActivity)
         data["created date"] = str(self.card.created_date)
         data["due date"] = str(self.card.due_date)
+        data['age'] = '~ {0} d'.format(
+            str((datetime.now(tz=timezone.utc) - self.card.created_date).total_seconds() // (60 * 60 * 24)))
         # data["description"] = self.card.desc or ""
         data["current list"] = BaseData.idList_to_List_map[self.card.idList].name
         return data
