@@ -1,27 +1,43 @@
-## How to use
-```
+
+```sh
 git clone https://github.com/SahandAkbarzadeh/trello-board-to-csv.git
 cd trello-board-to-csv
 
-echo TRELLO_KEY='YOUR TRELLO KEY'>config.py
-echo TRELLO_SECRET='YOUR TRELLO SECRET KEY'>>config.py
-echo BOARD_ID='BOARD ID YOU WANT TO EXTRACT'>>config.py
-echo OUT='OUTPUT FOLDER'>>config.py
+Usage: run.py [OPTIONS]
 
-# open your output folder and check for results
+Options:
+  --trello_key TEXT       Trello key. generate here :
+                          https://trello.com/1/appKey/generate
+  --trello_secret TEXT    Trello Secret. generate here :
+                          https://trello.com/1/appKey/generate
+  --board_id TEXT         id of board to extract data from. obtain here :
+                          https://trello.com/1/members/me?boards=all
+  --out TEXT              export folder. default: ~/
+  --delimiter TEXT        export delimiter. default: TAB
+  --card_extractors TEXT  extractors : BaseData, CustomFields, TimeInList.
+                          extractor with parameter example
+                          --card_extractors="TimeInList('list_id_one'
+                          'list_id_two')"
+                           default :"BaseData, CustomFields,
+                          TimeInList"
+  --filters TEXT          filters. available filters:
+                          Member('member_id' ...),
+                          List('list_id' ...)
+  --help                  Show this message and exit.
+
+
 
 ```
 
-delimiter : TAB
+example
 
-data that will be extracted:
-- base data
-  - card name
-  - labels
-  - members
-  - last activity
-  - created date
-  - due date
-  - current list
-- custom fields
-- amount of time that the card was in a list ( in minutes )
+```sh
+python run.py \ 
+        --trello_key="<KEY>" \
+        --trello_secret="<SECRET>" \
+        --board_id="<ID>" \
+        --out="~\export" \
+        --card_extractors="BaseData, CustomFields, TimeInList('<LIST_ID>')" \
+        --filters="Member('<MEMBER_ID>'), List('<LIST_ID>')"
+
+```
