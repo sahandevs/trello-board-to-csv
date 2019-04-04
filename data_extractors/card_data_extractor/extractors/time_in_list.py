@@ -70,13 +70,14 @@ class TimeInList(DataExtractor):
         for item in calculated_time:
             if len(self.arguments) > 0 and item not in self.arguments:
                 continue
-            data["hours in {0}".format(
+            data["time in {0}".format(
                 BaseData.idList_to_List_map.get(
                     item,
                     trello.List(
                         name=item,
                         list_id=item,
                         board=self.card.board)
-                ).name)] = str(
-                calculated_time[item])
+                ).name)] = '{0} h'.format(calculated_time[item]) \
+                if calculated_time[item] < 24 else \
+                '{0} d'.format(calculated_time[item] // 24)
         return data
