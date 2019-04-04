@@ -39,6 +39,8 @@ class Runner:
             for extractor in [x for x in card_extractors if
                               x.__name__ in [parameter.name for parameter in self.card_extractors]]:
                 extractor_instance = extractor(card)
+                parameter = [par for par in self.card_extractors if par.name == extractor.__name__][0]
+                extractor_instance.arguments = parameter.arguments
                 if not data.get(extractor_instance.category):
                     data[extractor_instance.category] = {}
                 data[extractor_instance.category].update(extractor_instance.extract())

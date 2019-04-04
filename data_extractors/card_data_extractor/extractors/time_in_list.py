@@ -68,6 +68,8 @@ class TimeInList(DataExtractor):
         calculated_time[action.to_list_name] += total.total_seconds() / (60 * 60)
         data = dict()
         for item in calculated_time:
+            if len(self.arguments) > 0 and item not in self.arguments:
+                continue
             data["hours in {0}".format(
                 BaseData.idList_to_List_map.get(
                     item,

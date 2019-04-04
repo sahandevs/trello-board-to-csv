@@ -1,9 +1,10 @@
 from trello import Card
-from typing import Dict
+from typing import Dict, List
 
 
 class DataExtractor:
     card: Card
+    arguments: List[str]
 
     @property
     def category(self):
