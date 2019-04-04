@@ -8,7 +8,7 @@ from filters.__index__ import __filters__ as filters
 from parameter_parser import Parameter
 
 CARD_EXTRACTORS = ', '.join([x.__name__ for x in card_extractors_all])
-FILTERS = ', '.join([x.__name__ for x in filters])
+FILTERS = ', '.join([x for x in filters])
 
 
 @click.command()
@@ -42,6 +42,7 @@ def setup(trello_key, trello_secret, board_id, out, delimiter, card_extractors, 
             board_id=board_id,
         )
     )
+    print(data_provider.board.name)  # TODO: add logging
     database = DataBase(delimiter=delimiter)
     runner = Runner(data_provider, database,
                     card_extractors_parameter=[Parameter(x.strip()) for x in card_extractors.split(',')],
