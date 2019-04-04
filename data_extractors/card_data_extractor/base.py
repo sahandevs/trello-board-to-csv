@@ -14,3 +14,7 @@ class DataExtractor:
 
     def extract(self) -> Dict[str, str]:
         pass
+
+    @classmethod
+    def __name__(cls):
+        return cls.__class__.__name__

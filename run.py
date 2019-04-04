@@ -3,6 +3,10 @@ from trello import Board, TrelloClient
 from data_provider import DataProvider
 from database import DataBase
 from runner import Runner
+from data_extractors.card_data_extractor.__index__ import __extractors__ as card_extractors_all
+from parameter_parser import Parameter
+
+CARD_EXTRACTORS = ', '.join([x.__name__ for x in card_extractors_all])
 
 
 @click.command()
@@ -12,7 +16,11 @@ from runner import Runner
               help='id of board to extract data from. obtain here : https://trello.com/1/members/me?boards=all')
 @click.option('--out', default='~/', help='export folder. default: ~/')
 @click.option('--delimiter', default='\t', help='export delimiter. default: TAB')
-def setup(trello_key, trello_secret, board_id, out, delimiter):
+@click.option('--card_extractors', default=CARD_EXTRACTORS,
+              help=('extractors : {0}.\nextractor with parameter example\n--card'
+                    '_extractors="TimeInList(\'list_id_one\' '
+                    '\'list_id_two\')"\n default :"{0}"').format(CARD_EXTRACTORS))
+def setup(trello_key, trello_secret, board_id, out, delimiter, card_extractors):
     # validate inputs
 
     if not trello_key or not trello_secret:
@@ -32,7 +40,8 @@ def setup(trello_key, trello_secret, board_id, out, delimiter):
         )
     )
     database = DataBase(delimiter=delimiter)
-    runner = Runner(data_provider, database)
+    runner = Runner(data_provider, database,
+                    card_extractors_parameter=[Parameter(x.strip()) for x in card_extractors.split(',')])
     runner.run()
     database.export(out)
 
