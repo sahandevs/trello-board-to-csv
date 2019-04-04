@@ -4,9 +4,11 @@ from data_provider import DataProvider
 from database import DataBase
 from runner import Runner
 from data_extractors.card_data_extractor.__index__ import __extractors__ as card_extractors_all
+from filters.__index__ import __filters__ as filters
 from parameter_parser import Parameter
 
 CARD_EXTRACTORS = ', '.join([x.__name__ for x in card_extractors_all])
+FILTERS = ', '.join([x.__name__ for x in filters])
 
 
 @click.command()
@@ -20,7 +22,8 @@ CARD_EXTRACTORS = ', '.join([x.__name__ for x in card_extractors_all])
               help=('extractors : {0}.\nextractor with parameter example\n--card'
                     '_extractors="TimeInList(\'list_id_one\' '
                     '\'list_id_two\')"\n default :"{0}"').format(CARD_EXTRACTORS))
-def setup(trello_key, trello_secret, board_id, out, delimiter, card_extractors):
+@click.option('--filters', help='filters. available filters:\n{0}'.format(FILTERS))
+def setup(trello_key, trello_secret, board_id, out, delimiter, card_extractors, filters):
     # validate inputs
 
     if not trello_key or not trello_secret:
@@ -41,7 +44,8 @@ def setup(trello_key, trello_secret, board_id, out, delimiter, card_extractors):
     )
     database = DataBase(delimiter=delimiter)
     runner = Runner(data_provider, database,
-                    card_extractors_parameter=[Parameter(x.strip()) for x in card_extractors.split(',')])
+                    card_extractors_parameter=[Parameter(x.strip()) for x in card_extractors.split(',')],
+                    filters=[Parameter(x.strip()) for x in filters.split(',')] if filters else [])
     runner.run()
     database.export(out)
 
