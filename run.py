@@ -10,8 +10,9 @@ from runner import Runner
 @click.option('--trello_secret', help='Trello Secret. generate here : https://trello.com/1/appKey/generate')
 @click.option('--board_id',
               help='id of board to extract data from. obtain here : https://trello.com/1/members/me?boards=all')
-@click.option('--out', help='result file. ~/export.csv')
-def setup(trello_key, trello_secret, board_id, out):
+@click.option('--out', default='~/', help='export folder. default: ~/')
+@click.option('--delimiter', default='\t', help='export delimiter. default: TAB')
+def setup(trello_key, trello_secret, board_id, out, delimiter):
     # validate inputs
 
     if not trello_key or not trello_secret:
@@ -19,10 +20,6 @@ def setup(trello_key, trello_secret, board_id, out):
 
     if not board_id:
         raise click.BadParameter('board_id is required')
-
-    if not out:
-        print('WARNING: output file will be export.csv in current folder.')
-        out = 'export.csv'
 
     trello_client = TrelloClient(
         api_key=trello_key,
@@ -34,7 +31,7 @@ def setup(trello_key, trello_secret, board_id, out):
             board_id=board_id,
         )
     )
-    database = DataBase()
+    database = DataBase(delimiter=delimiter)
     runner = Runner(data_provider, database)
     runner.run()
     database.export(out)

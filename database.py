@@ -37,9 +37,11 @@ class CategoryData:
 
 class DataBase:
     categories: List[CategoryData]
+    delimiter: str
 
-    def __init__(self):
+    def __init__(self, delimiter='\t'):
         self.categories = []
+        self.delimiter = delimiter
 
     def add_category(self, name) -> CategoryData:
         category = CategoryData(name)
@@ -72,7 +74,7 @@ class DataBase:
                     headers += [x for x in data]
                 writer = csv.DictWriter(
                     file,
-                    delimiter="\t",
+                    delimiter=self.delimiter,
                     fieldnames=list(set(headers)),
                     quoting=csv.QUOTE_ALL,
                 )
