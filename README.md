@@ -2,6 +2,7 @@
 ```sh
 git clone https://github.com/SahandAkbarzadeh/trello-board-to-csv.git
 cd trello-board-to-csv
+python -m pip install -r requirements.txt
 
 Usage: run.py [OPTIONS]
 
